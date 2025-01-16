@@ -1,0 +1,85 @@
+{
+    "environments": {
+        "python_command": "python3",
+        "standard_c++": {
+            "compiler": "clang++",
+            "cxxflags": "-Wall -Wextra -pedantic -std=c++11 -fopenmp",
+            "ldflags": "-fopenmp",
+            "openmp_libs": "-lgomp",
+            "openmp_offload_libs": "",
+            "ignore_warnings": "True",
+            "profiling_tool": ""
+        },
+        "nvidia_nvc++": {
+            "compiler": "nvc++",
+            "cxxflags": "-Wall -Wextra",
+            "ldflags": "",
+            "openmp_libs": "",
+            "openmp_offload_libs": "-mp=gpu",
+            "ignore_warnings": "True",
+            "profiling_tool": ""
+        },
+        "nvidia_cuda": {
+            "compiler": "nvc++",
+            "cuda_compiler": "nvcc",
+            "cxxflags": "-Wall -Wextra",
+            "ldflags": "-cuda",
+            "openmp_libs": "",
+            "openmp_offload_libs": "",
+            "ignore_warnings": "False",
+            "profiling_tool": ""
+        },
+        "nvidia_acc": {
+            "compiler": "nvc++",
+            "cxxflags": "-Wall -Wextra",
+            "ldflags": "-acc",
+            "openmp_libs": "",
+            "openmp_offload_libs": "",
+            "ignore_warnings": "False",
+            "profiling_tool": ""
+        },
+        "nvidia_clang++": {
+            "compiler": "clang++",
+            "cxxflags": "-Wall -Wextra -pedantic -std=c++11 -fopenmp",
+            "ldflags": "-fopenmp",
+            "openmp_libs": "",
+            "openmp_offload_libs": "-fopenmp-targets=nvptx64 -Xopenmp-target",
+            "ignore_warnings": "True",
+            "profiling_tool": ""
+        },
+        "amd": {
+            "compiler": "clang++",
+            "cxxflags": "-Wall -Wextra -pedantic -std=c++11 -fopenmp",
+            "ldflags": "-fopenmp",
+            "openmp_libs": "",
+            "openmp_offload_libs": "-fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa",
+            "ignore_warnings": "True",
+            "profiling_tool": ""
+        },
+        "intel": {
+            "compiler": "icpx",
+            "cxxflags": "-O0 -Wall -Wextra -pedantic -std=c++11 -fiopenmp",
+            "ldflags": "-fiopenmp",
+            "openmp_libs": "",
+            "openmp_offload_libs": "-fopenmp-targets=spir64",
+            "ignore_warnings": "True",
+            "profiling_tool": ""
+        },
+        "opencv": {
+            "opencv_libs": "`pkg-config --cflags --libs opencv4`"
+        },
+        "fpga": {
+            "compiler": "clang++",
+            "cxxflags": "-Wall -Wextra -pedantic -std=c++17 -fopenmp -Wno-deprecated-declarations",
+            "ldflags": "-fopenmp",
+            "openmp_libs": "",
+            "openmp_offload_libs": "",
+            "ignore_warnings": "False",
+            "profiling_tool": ""
+        },
+        "xilinx": {
+            "xilinx_xrt": "/opt/xilinx/xrt",
+            "xilinx_hls": "/tools/Xilinx/Vitis_HLS/2023.1/"
+        }
+    }
+}

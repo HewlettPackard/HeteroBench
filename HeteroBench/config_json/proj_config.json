@@ -1,0 +1,297 @@
+{
+    "benchmarks": [
+        {
+            "name": "canny_edge_detection",
+            "abbreviation": "ced",
+            "parameters": {
+                "input": "benchmarks/canny_edge_detection/input/1439x1919_stanford.jpg",
+                "output": "benchmarks/canny_edge_detection/output/1439x1919_stanford.jpg",
+                "low_threshold": 30,
+                "high_threshold": 90,
+                "iteration_times": 1
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "gaussian_filter.cpp",
+                "gradient_intensity_direction.cpp",
+                "edge_thinning.cpp",
+                "double_thresholding.cpp",
+                "hysteresis.cpp"
+            ],
+
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "optical_flow",
+            "abbreviation": "opf",
+            "parameters": {
+                "input": "benchmarks/optical_flow/datasets/larger",
+                "output": "benchmarks/optical_flow/datasets/output/acc_output.flo",
+                "max_height": 2160,
+                "max_width": 3840,
+                "iteration_times": 1
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "gradient_xy_calc.cpp",
+                "gradient_z_calc.cpp",
+                "gradient_weight_y.cpp",
+                "gradient_weight_x.cpp",
+                "outer_product.cpp",
+                "tensor_weight_y.cpp",
+                "tensor_weight_x.cpp",
+                "flow_calc.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "sobel_filter",
+            "abbreviation": "sbf",
+            "parameters": {
+                "input": "benchmarks/sobel_filter/input/1439x1919_stanford.jpg",
+                "output": "benchmarks/sobel_filter/output/1439x1919_stanford.jpg",
+                "iteration_times": 1
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "compute_gradient_magnitude.cpp",
+                "sobel_filter_x.cpp",
+                "sobel_filter_y.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "convolutional_neural_network",
+            "abbreviation": "cnn",
+            "parameters": {
+                "input": "benchmarks/convolutional_neural_network/input",
+                "output": "benchmarks/convolutional_neural_network/output",
+                "iteration_times": 1,
+                "conv2d_stride": 1,
+                "conv2d_padding": 1,
+                "conv2d_bias": 0.1,
+                "pooling_size": 2,
+                "pooling_stride": 2,
+                "input_size_h": 1024,
+                "input_size_w": 2048,
+                "conv_kernel_size_h": 3,
+                "conv_kernel_size_w": 3,
+                "full_connect_layer_size_w": 2048
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "conv2d.cpp",
+                "relu.cpp",
+                "max_pooling.cpp",
+                "pad_input.cpp",
+                "dot_add.cpp",
+                "softmax.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "multilayer_perceptron",
+            "abbreviation": "mlp",
+            "parameters": {
+                "input": "benchmarks/multilayer_perceptron/input",
+                "output": "benchmarks/multilayer_perceptron/output",
+                "iteration_times": 1,
+                "layer0_h1": 3072,
+                "layer0_w1": 2048,
+                "layer0_w2": 4096,
+                "layer1_h1": 3072,
+                "layer1_w1": 4096,
+                "layer1_w2": 4096,
+                "layer2_h1": 3072,
+                "layer2_w1": 4096,
+                "layer2_w2": 4096,
+                "layer3_h1": 3072,
+                "layer3_w1": 4096,
+                "layer3_w2": 1024
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "dot_add.cpp",
+                "sigmoid.cpp",
+                "softmax.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "one_head_attention",
+            "abbreviation": "oha",
+            "parameters": {
+                "input": "benchmarks/one_head_attention/input",
+                "output": "benchmarks/one_head_attention/output",
+                "iteration_times": 1,
+                "batch_size": 8,
+                "N": 1024,
+                "d": 128
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "transpose.cpp",
+                "softmax.cpp",
+                "matmul.cpp"
+            ],
+
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "digit_recog",
+            "abbreviation": "dgr",
+            "parameters": {
+                "input": "benchmarks/digit_recog/196data",
+                "output": "",
+                "iteration_times": 2000,
+                "num_training": 18000,
+                "class_size": 1800,
+                "digit_width": 4,
+                "k_const": 3,
+                "para_factor": 40
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "popcount.cpp",
+                "update_knn.cpp",
+                "knn_vote.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "spam_filter",
+            "abbreviation": "spf",
+            "parameters": {
+                "input": "benchmarks/spam_filter/data",
+                "output": "",
+                "iteration_times": 1,
+                "num_features": 10000,
+                "num_samples": 5000,
+                "num_training": 4500,
+                "num_testing": 500,
+                "step_size": 60000,
+                "num_epochs": 5
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "dotProduct.cpp",
+                "Sigmoid.cpp",
+                "computeGradient.cpp",
+                "updateParameter.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "3_matrix_multiplication",
+            "abbreviation": "3mm",
+            "parameters": {
+                "input": "",
+                "output": "",
+                "iteration_times": 1,
+                "ni": 1024,
+                "nj": 1024,
+                "nk": 1024,
+                "nl": 1024,
+                "nm": 1024
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "kernel_3mm_0.cpp",
+                "kernel_3mm_1.cpp",
+                "kernel_3mm_2.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "alternating_direction_implicit",
+            "abbreviation": "adi",
+            "parameters": {
+                "input": "",
+                "output": "",
+                "iteration_times": 1,
+                "tsteps": 50,
+                "n": 1024
+            },
+            "source": "main.cpp",
+            "krnl_sources": [
+                "init_array.cpp",
+                "kernel_adi.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        },
+        {
+            "name": "parallelize_particle",
+            "abbreviation": "ppc",
+            "parameters": {
+                "input": "",
+                "output": "",
+                "iteration_times": 1,
+                "nparticles": 1000000,
+                "savefreq": 10
+            },
+            "source": [
+                "main.cpp",
+                "common.cpp"
+            ],
+            "krnl_sources": [
+                "compute_forces.cpp",
+                "grid.cpp",
+                "move_particles.cpp"
+            ],
+            
+            "gpu_brand": "nvidia",
+            "gpu_arch": "",
+            
+            "fpga_board": "xilinx_u280_gen3x16_xdma_1_202211_1",
+            "kernel_frequency": "250"
+        }
+    ]
+}

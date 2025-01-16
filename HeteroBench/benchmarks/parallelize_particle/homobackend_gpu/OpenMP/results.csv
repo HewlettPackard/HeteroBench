@@ -1,0 +1,2 @@
+Index,KernelName,gpu-id,queue-id,queue-index,pid,tid,grd,wgr,lds,scr,arch_vgpr,accum_vgpr,sgpr,wave_size,sig,obj,DispatchNs,BeginNs,EndNs,CompleteNs
+0,"__omp_offloading_35_394b1376__Z21compute_forces_staticP10particle_tiP17linkedlist_static_l45.kd",2,0,0,20715,20715,159744,256,10752,3248,44,76,48,64,0x7f17a11ff980,0x7f17a06e1a00,964733028415,964734180189,964738912542,964739046749

@@ -1,0 +1,80 @@
+CXX := nvc++
+NVCC := nvcc
+CXXFLAGS := -Wall -Wextra -w
+LDFLAGS := -cuda
+
+# Include imageLib directory
+IMAGELIB_DIR := ../../imageLib
+CXXFLAGS += -I$(IMAGELIB_DIR)
+
+# input path
+INPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/optical_flow/datasets/larger
+
+# output path
+OUTPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/optical_flow/datasets/output/acc_output.flo
+
+# iterations
+ITERATIONS := 1
+
+# max height
+MAX_HEIGHT := 2160
+
+# max width
+MAX_WIDTH := 3840
+
+# Project name
+TARGET_EXEC := opf_sw
+
+# Source files
+SOURCES := main.cpp \
+    $(IMAGELIB_DIR)/Convert.cpp \
+	$(IMAGELIB_DIR)/Convolve.cpp \
+	$(IMAGELIB_DIR)/flowIO.cpp \
+    $(IMAGELIB_DIR)/Image.cpp \
+	$(IMAGELIB_DIR)/ImageIO.cpp \
+	$(IMAGELIB_DIR)/RefCntMem.cpp
+
+# MACRO DEFINITION
+MACRO := -DITERATIONS=$(ITERATIONS) -DMAX_HEIGHT=$(MAX_HEIGHT) -DMAX_WIDTH=$(MAX_WIDTH)
+
+# GPU Source files
+GPU_SOURCES := cuda_impl/gradient_xy_calc.cu cuda_impl/gradient_z_calc.cu cuda_impl/gradient_weight_y.cu cuda_impl/gradient_weight_x.cu cuda_impl/outer_product.cu cuda_impl/tensor_weight_y.cu cuda_impl/tensor_weight_x.cu cuda_impl/flow_calc.cu
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o)
+
+GPU_OBJECTS := $(GPU_SOURCES:.cu=.o)
+
+# Include directories
+INCLUDE_DIRS := cuda_impl/include $(IMAGELIB_DIR)
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(GPU_OBJECTS)
+	$(CXX)  $(LDFLAGS) -o $@ $^
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# To compile GPU source file
+cuda_impl/%.o: cuda_impl/%.cu
+	$(NVCC) -lineinfo  $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# Run
+run:
+	./$(TARGET_EXEC) -p $(INPUT_PATH) -o $(OUTPUT_PATH)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(GPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

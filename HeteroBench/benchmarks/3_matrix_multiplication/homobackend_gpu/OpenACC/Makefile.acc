@@ -1,0 +1,70 @@
+CXX := nvc++
+CXXFLAGS := -Wall -Wextra -w 
+LDFLAGS := -acc
+
+
+# iterations
+ITERATIONS := 20
+
+# NI, NJ, NK, NL, NM
+NI := 1024
+NJ := 1024
+NK := 1024
+NL := 1024
+NM := 1024
+
+# Project name
+TARGET_EXEC := krnl_3mm_sw
+
+# Source files
+SOURCES := main.cpp init_array.cpp
+
+# MACRO DEFINITION
+MACRO := -DITERATIONS=$(ITERATIONS) -DNI=$(NI) -DNJ=$(NJ) -DNK=$(NK) -DNL=$(NL) -DNM=$(NM)
+
+# GPU Source files
+GPU_SOURCES := acc_impl/kernel_3mm_0.cpp \
+               acc_impl/kernel_3mm_1.cpp \
+               acc_impl/kernel_3mm_2.cpp
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o)
+
+GPU_OBJECTS := $(GPU_SOURCES:.cpp=.o)
+
+# Include directories
+INCLUDE_DIRS := acc_impl/include .
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(GPU_OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+init_array.o: init_array.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+# To compile GPU source file
+acc_impl/%.o: acc_impl/%.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(LDFLAGS) $(INCLUDE_PARAMS)  -c $< -o $@
+
+# Run
+PROFILING_TOOL := #ncu --metrics sm__warps_active.avg.pct_of_peak_sustained_elapsed 
+run:
+	$(PROFILING_TOOL) ./$(TARGET_EXEC)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(GPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

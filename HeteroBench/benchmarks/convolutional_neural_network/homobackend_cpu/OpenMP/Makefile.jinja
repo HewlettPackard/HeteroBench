@@ -1,0 +1,93 @@
+CXX := {{ compiler }}
+CXXFLAGS := {{ cxxflags }}
+LDFLAGS := {{ ldflags }}
+OPENMP_LIBS := {{ openmp_libs }}
+
+# input path
+INPUT_PATH := {{ input }}
+
+# output path
+OUTPUT_PATH := {{ output }}
+
+# iteration_times
+ITERATIONS := {{ iteration_times }}
+# conv2d_stride
+CONV2D_STRIDE := {{ conv2d_stride }}
+# conv2d_padding
+CONV2D_PADDING := {{ conv2d_padding }}
+# conv2d_bias
+CONV2D_BIAS := {{ conv2d_bias }}
+# pooling_size
+POOLING_SIZE := {{ pooling_size }}
+# pooling_stride
+POOLING_STRIDE := {{ pooling_stride }}
+# input_size_h
+INPUT_SIZE_H := {{ input_size_h }}
+# input_size_w
+INPUT_SIZE_W := {{ input_size_w }}
+# conv_kernel_size_h
+CONV_KERNEL_SIZE_H := {{ conv_kernel_size_h }}
+# conv_kernel_size_w
+CONV_KERNEL_SIZE_W := {{ conv_kernel_size_w }}
+# full_connect_layer_size_w
+FULL_CONNECT_LAYER_SIZE_W := {{ full_connect_layer_size_w }}
+
+# Project name
+TARGET_EXEC := {{ target }}_sw
+
+# Source files
+SOURCES := {{ sources }}
+
+# MACRO DEFINITION
+MACRO := -DITERATIONS=$(ITERATIONS) \
+	-DCONV2D_STRIDE=$(CONV2D_STRIDE) \
+	-DCONV2D_PADDING=$(CONV2D_PADDING) \
+	-DCONV2D_BIAS=$(CONV2D_BIAS) \
+	-DPOOLING_SIZE=$(POOLING_SIZE) \
+	-DPOOLING_STRIDE=$(POOLING_STRIDE) \
+	-DINPUT_SIZE_H=$(INPUT_SIZE_H) \
+	-DINPUT_SIZE_W=$(INPUT_SIZE_W) \
+	-DCONV_KERNEL_SIZE_H=$(CONV_KERNEL_SIZE_H) \
+	-DCONV_KERNEL_SIZE_W=$(CONV_KERNEL_SIZE_W) \
+	-DFULL_CONNECT_LAYER_SIZE_W=$(FULL_CONNECT_LAYER_SIZE_W)
+
+# CPU Source files
+CPU_SOURCES := {{ cpu_sources }}
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o)
+
+CPU_OBJECTS := $(CPU_SOURCES:.cpp=.o)
+
+INCLUDE_DIRS := cpu_impl/include
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(CPU_OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(OPENMP_LIBS)
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# To compile other CPU source files
+cpu_impl/%.o: cpu_impl/%.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# Run
+run:
+	{{ profiling_tool }}./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(CPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

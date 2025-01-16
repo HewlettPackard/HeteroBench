@@ -1,0 +1,71 @@
+CXX := nvc++
+NVCC := nvcc
+CXXFLAGS := -Wall -Wextra -w
+LDFLAGS := -cuda
+
+# nsteps
+NSTEPS := 1
+
+# num of particles
+NPARTICLES := 1000000
+
+# num of save frequency
+SAVEFREQ := 10
+
+# Project name
+TARGET_EXEC := ppc_sw
+
+# Source files
+SOURCES := main.cpp common.cpp
+
+# MACRO DEFINITION
+MACRO := -DNSTEPS=$(NSTEPS) -DNPARTICLES=$(NPARTICLES) -DSAVEFREQ=$(SAVEFREQ)
+
+# GPU source files
+GPU_SOURCES := cuda_impl/compute_forces.cu cuda_impl/grid.cu cuda_impl/move_particles.cu
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o)
+
+GPU_OBJECTS := $(GPU_SOURCES:.cu=.o)
+
+# Include directories, also include input_data.h under current directory
+INCLUDE_DIRS := cuda_impl/include .
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(GPU_OBJECTS)
+	$(CXX)  $(LDFLAGS) -o $@ $^ 
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+common.o: common.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+	
+cuda_impl/grid.o: cuda_impl/grid.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+	
+# To compile other GPU source files
+cuda_impl/%.o: cuda_impl/%.cu
+	$(NVCC) -lineinfo $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# Run
+PROFILING_TOOL := 
+run:
+	$(PROFILING_TOOL) ./$(TARGET_EXEC)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(GPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

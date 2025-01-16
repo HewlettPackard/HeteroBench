@@ -1,0 +1,63 @@
+CXX := {{compiler}}
+CXXFLAGS := {{cxxflags}}
+LDFLAGS := {{ldflags}}
+
+# input path
+INPUT_PATH := {{input}}
+
+# output path
+OUTPUT_PATH := {{output}}
+
+# iterations
+ITERATIONS := {{iteration_times}}
+
+# Project name
+TARGET_EXEC := {{target}}_sw
+
+# Source files
+SOURCES := {{sources}}
+
+# MACRO DEFINITION
+MACRO := -DITERATIONS=$(ITERATIONS)
+
+# GPU Source files
+GPU_SOURCES := {{gpu_sources}}
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o) 
+
+GPU_OBJECTS := $(GPU_SOURCES:.cpp=.o)
+
+# Include directories
+INCLUDE_DIRS := acc_impl/include .
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(GPU_OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# To compile GPU source file
+acc_impl/%.o: acc_impl/%.cpp
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(INCLUDE_PARAMS)  -c $< -o $@
+
+# Run
+run:
+	{{profiling_tool}} ./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(GPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

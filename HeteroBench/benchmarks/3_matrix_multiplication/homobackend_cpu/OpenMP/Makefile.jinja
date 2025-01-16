@@ -1,0 +1,67 @@
+CXX := {{ compiler }}
+CXXFLAGS := {{ cxxflags }}
+LDFLAGS := {{ ldflags }}
+OPENMP_LIBS := {{ openmp_libs }}
+
+# iterations
+ITERATIONS := {{ iteration_times }}
+
+# NI, NJ, NK, NL, NM
+NI := {{ ni }}
+NJ := {{ nj }}
+NK := {{ nk }}
+NL := {{ nl }}
+NM := {{ nm }}
+
+# Project name
+TARGET_EXEC := krnl_{{ target }}_sw
+
+# Source files
+SOURCES := {{ sources }} init_array.cpp
+
+# MACRO DEFINITION
+MACRO := -DITERATIONS=$(ITERATIONS) -DNI=$(NI) -DNJ=$(NJ) -DNK=$(NK) -DNL=$(NL) -DNM=$(NM)
+
+# CPU Source files
+CPU_SOURCES := {{ cpu_sources }}
+
+# Object files
+OBJECTS := $(SOURCES:.cpp=.o)
+
+CPU_OBJECTS := $(CPU_SOURCES:.cpp=.o)
+
+INCLUDE_DIRS := cpu_impl/include .
+INCLUDE_PARAMS := $(addprefix -I, $(INCLUDE_DIRS))
+
+# Default target
+all: $(TARGET_EXEC)
+
+$(TARGET_EXEC): $(OBJECTS) $(CPU_OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(OPENMP_LIBS)
+
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+init_array.o: init_array.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# To compile other CPU source files
+cpu_impl/%.o: cpu_impl/%.cpp
+	$(CXX) $(CXXFLAGS) $(MACRO) $(INCLUDE_PARAMS) -c $< -o $@
+
+# Run
+run:
+	{{ profiling_tool }}./$(TARGET_EXEC)
+
+# Clean up
+clean:
+	rm -f $(TARGET_EXEC) $(OBJECTS) $(CPU_OBJECTS)
+
+.PHONY: all clean run help
+
+help:
+	@echo "Usage: make [all|clean|run|help]"
+	@echo "  all:        Build the project"
+	@echo "  clean:      Clean up the project"
+	@echo "  run:        Run the project"
+	@echo "  help:       Show this help message"

@@ -1,0 +1,9 @@
+
+main parameter vector: 
+m[0]: 0 | m[1]: 0 | m[2]: 0 | m[3]: 0 | m[4]: 0 | m[5]: 0 | m[6]: 0 | m[7]: 0 | m[8]: 0 | m[9]: 0 | m[10]: 0 | m[11]: 0 | m[12]: 0 | m[13]: 0 | m[14]: 0 | m[15]: 0 | m[16]: 0 | m[17]: 0 | m[18]: 0 | m[19]: 0 | m[20]: 0 | m[21]: 0 | m[22]: 0 | m[23]: 0 | m[24]: 0 | m[25]: 0 | m[26]: 0 | m[27]: 0 | m[28]: 0 | m[29]: 0 | 
+Training TPR: 0
+Training FPR: 0
+Training Error: 36.8444
+Testing TPR: 0
+Testing FPR: 0
+Testing Error: 36.8

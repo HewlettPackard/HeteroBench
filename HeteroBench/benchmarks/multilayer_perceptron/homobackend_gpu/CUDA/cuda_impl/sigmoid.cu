@@ -1,0 +1,69 @@
+/*
+ * (C) Copyright [2024] Hewlett Packard Enterprise Development LP
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the Software),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+ 
+#include "cuda_impl.h"
+#include <iostream>
+#include <math.h>
+#include <cuda_runtime.h>
+
+using namespace std;
+
+/* This is the Cpp implementation of the following Python code */
+/* Here the input and output are 2D arraies */
+/*
+def sigmoid(a):
+  z = 1 / (1 + np.exp(-a))
+  return z
+*/
+
+// CUDA Kernel for sigmoid
+__global__ void sigmoid_kernel(double *sigmoid_input, double *sigmoid_output, int size) 
+{
+  int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+  if(i < size) {
+    sigmoid_output[i] = 1 / (1 + exp(-sigmoid_input[i]));
+  }
+}
+
+// Host function to launch the CUDA kernel
+void sigmoid(double *sigmoid_input, double *sigmoid_output, int size) 
+{
+  double *d_sigmoid_input;
+  double *d_sigmoid_output;
+
+  cudaMalloc(&d_sigmoid_input, size*sizeof(double));
+  cudaMalloc(&d_sigmoid_output, size*sizeof(double));
+
+  cudaMemcpy(d_sigmoid_input, sigmoid_input, size*sizeof(double), cudaMemcpyHostToDevice);
+
+  dim3 threadsPerBlock(16, 16);
+  dim3 blocksPerGrid((size + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                      (size + threadsPerBlock.y - 1) / threadsPerBlock.y);
+
+  sigmoid_kernel<<<blocksPerGrid, threadsPerBlock>>>(d_sigmoid_input, d_sigmoid_output, size);
+
+  cudaMemcpy(sigmoid_output, d_sigmoid_output, size*sizeof(double), cudaMemcpyDeviceToHost);
+
+  cudaFree(d_sigmoid_input);
+  cudaFree(d_sigmoid_output);
+}
