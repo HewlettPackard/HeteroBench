@@ -43,8 +43,8 @@ def get_nvidia_arch():
     sm_70: Tesla V100, Titan V
     sm_72: Jetson AGX Xavier, Jetson Xavier NX
     sm_75: GTX 1660 Ti, RTX 2060, RTX 2070, RTX 2080, Titan RTX, Quadro RTX 4000, Quadro RTX 5000, Quadro RTX 6000, Quadro RTX 8000, Tesla T4
-    sm_80: A100
-    sm_86: RTX 3050, RTX 3060, RTX 3070m RTX 3080, RTX 3090, RTX A2000, RTX A3000, RTX A4000, RTX A5000, RTX A6000
+    sm_80: A100, A100X
+    sm_86: RTX 3050, RTX 3060, RTX 3070m RTX 3080, RTX 3090, RTX A16, RTX A2000, RTX A3000, RTX A4000, RTX A5000, RTX A6000
     sm_87: RTX 4080, RTX 4090, RTX 6000, Tesla L40
     sm_90: H100, H200
     sm_100: B100, B200, RTX 5080, RTX 5090
@@ -63,9 +63,9 @@ def get_nvidia_arch():
         'jetson agx xavier': 'sm_72', 'jetson xavier nx': 'sm_72',
         'gtx 1660': 'sm_75', 'rtx 2060': 'sm_75', 'rtx 2070': 'sm_75', 'rtx 2080': 'sm_75', 'titan rtx': 'sm_75',
         'quadro rtx': 'sm_75', 'tesla t4': 'sm_75',
-        'a100': 'sm_80',
+        'a100': 'sm_80', 'a100x': 'sm_80',
         'rtx 3050': 'sm_86', 'rtx 3060': 'sm_86', 'rtx 3070': 'sm_86', 'rtx 3080': 'sm_86', 'rtx 3090': 'sm_86',
-        'rtx a2000': 'sm_86', 'rtx a3000': 'sm_86', 'rtx a4000': 'sm_86', 'rtx a5000': 'sm_86', 'rtx a6000': 'sm_86',
+        'rtx a16': 'sm_86', 'rtx a2000': 'sm_86', 'rtx a3000': 'sm_86', 'rtx a4000': 'sm_86', 'rtx a5000': 'sm_86', 'rtx a6000': 'sm_86',
         'rtx 4080': 'sm_87', 'rtx 4090': 'sm_87', 'rtx 6000': 'sm_87', 'tesla l40': 'sm_87',
         'h100': 'sm_90', 'h200': 'sm_90',
         'b100': 'sm_100', 'b200': 'sm_100', 'rtx 5080': 'sm_100', 'rtx 5090': 'sm_100'
@@ -81,7 +81,7 @@ def get_nvidia_arch():
                 return arch
 
         print(f"Unknown NVIDIA GPU architecture for {gpu_name}")
-        print("Please refer to the NVIDIA GPU architecture information, update the gpu_arch_map dictionary and modify the \"arch\" in env_config.json:")
+        print("Please directly update the GPU architecture as \"gpu_arch\" in HeteroBench/config_json/proj_config.json")
         print(nvidia_arch_info)
         return None
 
