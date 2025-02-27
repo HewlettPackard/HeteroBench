@@ -8,10 +8,10 @@ IMAGELIB_DIR := ../../imageLib
 CXXFLAGS += -I$(IMAGELIB_DIR)
 
 # input path
-INPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/optical_flow/datasets/larger
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/optical_flow/datasets/output/acc_output.flo
+OUTPUT_PATH := 
 
 # iterations
 ITERATIONS := 1

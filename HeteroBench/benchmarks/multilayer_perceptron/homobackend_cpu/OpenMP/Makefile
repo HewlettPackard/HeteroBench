@@ -4,10 +4,10 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/multilayer_perceptron/input
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/multilayer_perceptron/output
+OUTPUT_PATH := 
 
 # iteration_times
 ITERATIONS := 1

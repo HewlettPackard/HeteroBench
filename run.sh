@@ -18,25 +18,37 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-docker build -t heterobench-container .
+HAS_GPU=false
+container_name="heterobench-container"
+temp_name="heterobench-temp-container"
 
-if [ ! -d logs ]; then
-    mkdir logs
+if [ "$HAS_GPU" = true ] ; then
+    docker build -t --build-arg GPU_ENV_VAR=NVIDIA $container_name .
+else
+    docker build -t $container_name .
 fi
 
-run() {
-    filename=logs/$1_$(date +"%Y%m%d_%I%M%S").log
-    echo "Output for the next run is in the file - ${filename}."
-    echo "Running all benchmarks for $1 ..."
-    time docker run --gpus all -it heterobench-container python3 /workspace/HeteroBench/heterobench.py all run $1 > ${filename}
-    echo "Done."
-    echo
-}
+docker create --name $temp_name ${container_name}
+docker cp $temp_name:/workspace/HeteroBench/logs .
+docker rm $temp_name
 
-# RUN different benchmarks
-# run python
-# run numba
-run cpu
-run gpu_omp
-run gpu_acc
-run gpu_cuda
+# if [ ! -d logs ]; then
+#     mkdir logs
+# fi
+#
+# run() {
+#     filename=logs/$1_$(date +"%Y%m%d_%I%M%S").log
+#     echo "Output for the next run is in the file - ${filename}."
+#     echo "Running all benchmarks for $1 ..."
+#     time docker run --gpus all -it heterobench-container python3 /workspace/HeteroBench/heterobench.py all run $1 > ${filename}
+#     echo "Done."
+#     echo
+# }
+#
+# # RUN different benchmarks
+# # run python
+# # run numba
+# run cpu
+# run gpu_omp
+# run gpu_acc
+# run gpu_cuda

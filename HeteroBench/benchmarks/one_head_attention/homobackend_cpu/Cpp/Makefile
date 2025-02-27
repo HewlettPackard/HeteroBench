@@ -4,10 +4,10 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/one_head_attention/input
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/one_head_attention/output
+OUTPUT_PATH := 
 
 # iteration_times
 ITERATIONS := 1

@@ -4,10 +4,10 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/sobel_filter/input/1439x1919_stanford.jpg
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/hongzhet/myProjects/cova_benchmarks/HeteroBench/benchmarks/sobel_filter/output/1439x1919_stanford.jpg
+OUTPUT_PATH := 
 
 # iterations
 ITERATIONS := 1

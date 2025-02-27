@@ -4,10 +4,10 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/convolutional_neural_network/input
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/convolutional_neural_network/output
+OUTPUT_PATH := 
 
 # iteration_times
 ITERATIONS := 1

@@ -4,10 +4,10 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/canny_edge_detection/input/1439x1919_stanford.jpg
+INPUT_PATH := 
 
 # output path
-OUTPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/canny_edge_detection/output/1439x1919_stanford.jpg
+OUTPUT_PATH := 
 
 # low threshold
 LOW_THRESHOLD := 30

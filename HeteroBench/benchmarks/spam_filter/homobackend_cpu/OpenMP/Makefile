@@ -4,7 +4,7 @@ LDFLAGS := -fopenmp
 OPENMP_LIBS := -lgomp
 
 # input path
-INPUT_PATH := /home/mishraal/git/cova_benchmarks/new/HeteroBench/benchmarks/spam_filter/data
+INPUT_PATH :=
 
 # iterations
 ITERATIONS := 1

@@ -21,6 +21,9 @@
 # Use a base image with Ubuntu
 FROM ubuntu:22.04
 
+ARG GPU_ENV_VAR
+ENV GPU_ENV_VAR=${GPU_ENV_VAR}
+
 # Install dependencies and tools
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -36,27 +39,33 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install NVIDIA CUDA Toolkit
-RUN apt-get update && apt-get install -y nvidia-cuda-toolkit \
-    && rm -rf /var/lib/apt/lists/*
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then \
+    apt-get update && apt-get install -y nvidia-cuda-toolkit \
+    && rm -rf /var/lib/apt/lists/*; \
+    fi
 
 # Install NVIDIA Container Toolkit
-RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then \
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
     && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list \
+       sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+       tee /etc/apt/sources.list.d/nvidia-container-toolkit.list \
     && apt-get update \
-    && apt-get install -y nvidia-container-toolkit
+    && apt-get install -y nvidia-container-toolkit; \
+    fi
 
 # Install NVIDIA HPC SDK
-RUN wget https://developer.download.nvidia.com/hpc-sdk/24.11/nvhpc_2024_2411_Linux_x86_64_cuda_12.6.tar.gz \
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then \
+    wget https://developer.download.nvidia.com/hpc-sdk/24.11/nvhpc_2024_2411_Linux_x86_64_cuda_12.6.tar.gz \
     && tar xpzf nvhpc_2024_2411_Linux_x86_64_cuda_12.6.tar.gz \
-    && nvhpc_2024_2411_Linux_x86_64_cuda_12.6/install
+    && nvhpc_2024_2411_Linux_x86_64_cuda_12.6/install; \
+    fi
 
 # Install requirements
 RUN pip3 install Jinja2 opencv-python numba numpy
 
 # Set up environment variables for GPU and FPGA tools
-ENV PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/24.11/compilers/bin:$PATH"
+# ENV PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/24.11/compilers/bin:$PATH"
 # ENV LD_LIBRARY_PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/24.11/compilers/lib:$LD_LIBRARY_PATH"
 
 # Copy the HeteroBench repository
@@ -65,7 +74,10 @@ COPY HeteroBench /workspace/HeteroBench
 WORKDIR /workspace/HeteroBench
 
 # Build the benchmarking code
-RUN python3 heterobench.py all build cpu 
-RUN python3 heterobench.py all build gpu_omp 
-RUN python3 heterobench.py all build gpu_acc 
-RUN python3 heterobench.py all build gpu_cuda 
+# RUN python3 heterobench.py all run python 
+# RUN python3 heterobench.py all run numba
+RUN python3 heterobench.py all build cpu && python3 heterobench.py all run cpu 
+RUN python3 heterobench.py all build cpu serial && python3 heterobench.py all run cpu serial
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then python3 heterobench.py all build gpu_omp && python3 heterobench.py all run gpu_omp; fi
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then python3 heterobench.py all build gpu_acc && python3 heterobench.py all run gpu_acc; fi
+RUN if [ "${GPU_ENV_VAR}" = "NVIDIA" ]; then python3 heterobench.py all build gpu_cuda && python3 heterobench.py all run gpu_cuda; fi
