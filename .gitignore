@@ -1,0 +1,82 @@
+# IDE and Editor files
+.vscode/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Build and compilation artifacts
+build/
+.ipcache/
+*.so
+*.o
+*.d
+.Xil/
+_x/
+*.ipcache/
+
+# Project specific directories
+hls_proj_*/
+pl_*/
+
+# Log and info files
+*.log
+*.info
+*.link_summary
+*.ltx
+*.backup.log
+
+# Data files
+*.npy
+*.bin
+
+# FPGA related files
+*.xo
+*.xsa
+*.xclbin
+*.package_summary
+*.xo.compile_summary
+
+# Generated files
+Makefile
+
+# Media files
+*.png
+*.jpg
+
+# Executable files
+cedt_sw
+optical_flow_sw
+digit_recog_sw
+sobel_filter_sw
+rendering_sw
+krnl_3mm_sw
+krnl_adi_sw
+mlp_sw
+cnn_sw
+parallelize_particle_sw
+spam_filter_sw
+test
+gpu_test_sw
+ced_sw
+cedt
+opf_sw
+dgr_sw
+sbf_sw
+krnl_3mm_sw
+krnl_adi_sw
+mlp_sw
+cnn_sw
+ppc_sw
+spf_sw
+oha_sw
+
+# Large dataset files
+/HeteroBench/benchmarks/convolutional_neural_network/input/
+/HeteroBench/benchmarks/convolutional_neural_network/output/
+/HeteroBench/benchmarks/multilayer_perceptron/input/
+/HeteroBench/benchmarks/multilayer_perceptron/output/
+/HeteroBench/benchmarks/canny_edge_detection/output/
+/HeteroBench/benchmarks/optical_flow/datasets/output/
+/HeteroBench/benchmarks/one_head_attention/input/
+/HeteroBench/benchmarks/one_head_attention/output/

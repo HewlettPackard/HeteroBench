@@ -51,7 +51,7 @@ gpu_impl/%.o: gpu_impl/%.cpp
 
 # Run
 run:
-	{{ profiling_tool }}./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
+	{{ profiling_tool }} ./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
 
 # Clean up
 clean:

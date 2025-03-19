@@ -24,7 +24,7 @@
 
 using namespace std;
 
-#pragma omp declare target
+// #pragma omp declare target
 void popcount(DigitType diff, int* popcount_result)
 {
     diff -= (diff >> 1) & m1;             //put count of each 2 bits into those 2 bits
@@ -36,4 +36,4 @@ void popcount(DigitType diff, int* popcount_result)
     *popcount_result = diff & 0x7f;
     return;
 }
-#pragma omp end declare target
+// #pragma omp end declare target

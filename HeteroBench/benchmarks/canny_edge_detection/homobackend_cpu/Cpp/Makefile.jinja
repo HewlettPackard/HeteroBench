@@ -54,7 +54,7 @@ cpu_impl/%.o: cpu_impl/%.cpp
 
 # Run
 run:
-	{{ profiling_tool }}./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH) $(LOW_THRESHOLD) $(HIGH_THRESHOLD)
+	{{ profiling_tool }} ./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH) $(LOW_THRESHOLD) $(HIGH_THRESHOLD)
 
 # Clean up
 clean:

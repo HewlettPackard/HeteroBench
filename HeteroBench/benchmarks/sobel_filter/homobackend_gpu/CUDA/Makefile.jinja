@@ -48,7 +48,7 @@ cuda_impl/%.o: cuda_impl/%.cu
 
 # Run
 run:
-	{{ profiling_tool }}./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
+	{{ profiling_tool }} ./$(TARGET_EXEC) $(INPUT_PATH) $(OUTPUT_PATH)
 
 # Clean up
 clean:

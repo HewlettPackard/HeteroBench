@@ -57,7 +57,7 @@ common.o: common.cpp
 
 # Run
 run:
-	{{ profiling_tool }}./$(TARGET_EXEC)
+	{{ profiling_tool }} ./$(TARGET_EXEC)
 
 # FPGA Compilation
 
@@ -83,10 +83,13 @@ fpga_link: $(XCLBIN)
 
 ifeq ({{ fpga_board }}, xilinx_vck5000_gen4x8_xdma_2_202210_1)
 $(XCLBIN): $(XSA_OBJ)
-	v++ -p -t $(TARGET) -f {{ fpga_board }} $^ -o $@ --package.boot_mode=ospi
+	v++ -p -t $(TARGET) -f xilinx_vck5000_gen4x8_xdma_2_202210_1 $^ -o $@ --package.boot_mode=ospi
 $(XSA_OBJ): $(XOS)
 	v++ -l $(XOCCFLAGS) $(XOCCLFLAGS) --config ./fpga_impl/xclbin_overlay.cfg -o $@ $^
 else ifeq ({{ fpga_board }}, xilinx_u280_gen3x16_xdma_1_202211_1)
+$(XCLBIN): $(XOS)
+	v++ -l $(XOCCFLAGS) $(XOCCLFLAGS) --config ./fpga_impl/xclbin_overlay.cfg -o $@ $^
+else ifeq ({{ fpga_board }}, xilinx_u250_gen3x16_xdma_4_1_202210_1)
 $(XCLBIN): $(XOS)
 	v++ -l $(XOCCFLAGS) $(XOCCLFLAGS) --config ./fpga_impl/xclbin_overlay.cfg -o $@ $^
 endif

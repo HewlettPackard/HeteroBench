@@ -62,7 +62,7 @@ acc_impl/%.o: acc_impl/%.cpp
 
 # Run
 run:
-	{{ profiling_tool }}./$(TARGET_EXEC) -p $(INPUT_PATH)
+	{{ profiling_tool }} ./$(TARGET_EXEC) -p $(INPUT_PATH)
 
 # Clean up
 clean:
