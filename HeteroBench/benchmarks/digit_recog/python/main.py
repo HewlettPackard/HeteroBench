@@ -23,7 +23,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 import numpy as np
 import sys
 import time
-from numba import jit
 
 # cpu_impl.h
 if len(sys.argv) == 8:
@@ -54,7 +53,6 @@ m4 = np.uint64(0x0f0f0f0f0f0f0f0f)
 num_test = iterations
 
 # popcount.cpp
-#@jit(nopython=True, cache=True)
 def popcount(diff): # Need to make sure all the data type is same
     diff -= (diff >> DigitType(1)) & m1
     diff = (diff & m2) + ((diff >> DigitType(2)) & m2)
@@ -65,7 +63,6 @@ def popcount(diff): # Need to make sure all the data type is same
     return diff & DigitType(0x7f)
 
 # update_knn.cpp
-#@jit(nopython=True, cache=True)
 def update(training_set, test_set, dists, labels, label):
     dist = 0
     for i in range(digit_width):
@@ -83,7 +80,6 @@ def update(training_set, test_set, dists, labels, label):
         dists[max_dist_id] = dist
         labels[max_dist_id] = label
 
-#@jit(nopython=True, cache=True)
 def update_knn(training_set, test_set, dists, labels):
     for i in range(num_training):
         label = i / class_size
@@ -92,7 +88,6 @@ def update_knn(training_set, test_set, dists, labels):
         update(training_set[i], test_set, dists, labels, label)
 
 # knn_vote.cpp
-#@jit(nopython=True, cache=True)
 def knn_vote(labels):
     max_vote = 0
     votes = np.zeros(10, dtype=np.int32)
