@@ -1,45 +1,48 @@
+# HeteroBench: Multi-kernel Benchmarks for Heterogeneous Systems
+
+## Overview
+HeteroBench is a comprehensive benchmark suite designed to evaluate heterogeneous systems with various accelerators, including CPUs, GPUs (NVIDIA, AMD, Intel), and FPGAs (AMD). It features multi-kernel applications spanning domains like image processing, machine learning, numerical computation, and physical simulation. HeteroBench aims to assist users in assessing performance, optimizing hardware usage, and facilitating decision-making in HPC environments.
+
+## Key Features
+- **Broad Hardware Compatibility**: Supports CPUs, GPUs from multiple brands, and FPGAs.
+- **Multi-language Support**: Benchmarks available in Python, Numba-accelerated Python, and various C++ versions (serial, OpenMP, OpenACC, CUDA, and Vitis HLS).
+- **Customizable Kernel Placement**: Enables kernel-level optimization for different hardware backends by users.
+- **Fair Comparisons**: Standardized algorithms across platforms for unbiased benchmarking.
+- **User-friendly Design**: Simplified setup with configuration files and a top-level Python script for project management.
+
 ## Directory Structure
 
 At the top level, you will find the following files and directories:
 
-- **README.md**: Instructions on building and running the artifact.
-- **Docker Setup.md**: Information on setting up Docker for running applications on NVIDIA GPUs. (Other GPUs will need different setup).
+- **LICENSE.md**: Open source license information for the repository.
+- **README.md**: This file, providing an overview description.
 - **Dockerfile**: Docker file used to create the container.
-- **LICENSE.md**: Open Source License information for the repository.
 - **run.sh**: A single-point run file for building and running all scripts.
-- **HeteroBench**: This is the the directory for the repository which has all the benchmark codes. It contains the `heterobench.py` file, which is the main Python script for managing and executing all benchmarks. The repository is organized as follows:
-  - **Benchmark Directory**: Contains 11 subdirectories for benchmarks and 1 GPU test directory. Each benchmark application is stored in its subdirectory, which includes Python and C++ implementations along with Makefiles. Each subdirectory contains different versions of implementations.
-  - **Configuration Files Directory**: Contains two configuration files specifying system environment settings and benchmark parameters.
-  - **Logs**: After running a benchmark, a `log` directory will be generated. This directory contains log files and terminal outputs showing time consumption profiling results.
+- **Documentation/**: Detail documents and instructions.
+  - **[Description.md](./Documentation/Description.md)**: A detail description and quick start guide of this project.
+  - **[Notes.md](./Documentation/Notes.md)**: Some instruction notes to add new GPUs, run without GPUs, or change FPGAs.
+  - **[Docker_Setup.md](./Documentation/Docker_Setup.md)**: Information on setting up Docker for running applications on NVIDIA GPUs.
+  - **[Source_Compilation.md](./Documentation/Source_Compilation.md)**: Instructions for compiling and running HeteroBench from source code.
+- **HeteroBench/**: The main directory containing all benchmark codes:
+  - **heterobench.py**: The main Python script for managing and executing all benchmarks.
+  - **benchmarks/**: Contains 11 subdirectories, one for each benchmark. Each includes Python and C++ implementations along with Makefiles.
+  - **config_json/**: Contains configuration files specifying system environment settings and benchmark parameters.
+  - **logs/**: Generated after running benchmarks, contains log files and terminal outputs showing time consumption profiling results.
 
----
+## Contributing
 
-## HeteroBench Docker Run
+We welcome contributions to HeteroBench! If you'd like to add new benchmarks, support for new hardware, or improve existing code, please submit a pull request or open an issue.
 
-To execute the artifact, ensure that the Docker environment is properly set up. Follow the instructions provided in the `Docker Setup.md` file. Once the environment is configured, run the `run.sh` file. This script builds the Dockerfile to set up the environment within the Docker container.
+## Cite Us
 
-On an NVIDIA GPU, *HeteroBench* supports six scenarios: Python, Numba, CPU, OpenMP, OpenACC, and CUDA. The table below shows the average build and execution time for each scenario on an *AMD EPYC 7713 64-Core processor* and an *NVIDIA A100 GPU*. Note that running the Python and Numba scenarios on a CPU can take over 10 hours and 3 hours, respectively. Therefore, these scenarios are commented out by default in the `run.sh` file. By default, the script runs benchmarks for CPUs and NVIDIA GPUs using OpenMP, OpenACC, and CUDA.
+If you find our project helpful, please consider cite our [ICPE paper](https://doi.org/10.1145/3676151.3719366):
 
-| **Scenarios**        | **Compile Time (s)** | **Run Time (s)**   |
-|----------------------|----------------------|--------------------|
-| Python               | N/A                  | Over 10 hrs        |
-| Numba                | N/A                  | Over 3 hrs         |
-| CPU                  | 100                  | 74                 |
-| GPU OpenMP           | 114                  | 57                 |
-| GPU OpenACC          | 118                  | 44                 |
-| GPU CUDA             | 125                  | 36                 |
-| FPGA                 | Over 24 hrs          | Over 3 hrs         |
+```
+```
 
-The script generates output logs in the `logs` directory upon completion. To include the Python and Numba scenarios, uncomment lines `#37` and `#38` in the `run.sh` file.
+## Support and Contact
 
-### Additional Notes
+If you have any questions or need assistance with HeteroBench, feel free to contact:
 
-- To benchmark other GPUs, such as AMD or Intel, a different Docker setup is required.
-- For FPGA benchmarking, the system must be configured specifically for the target FPGA. However, the benchmark execution process remains consistent.
-- For detailed instructions on running the benchmarks manually, refer to the `README.md` file in the `heterobench` directory.
-
-If you have any questions, feel free to contact us.
-
-Point of Contact:
-- Alok Mishra : alok.mishra@hpe.com
-- Hongzheng Tian : hongzheng.tian@hpe.com
+- Alok Mishra: alok.mishra@hpe.com
+- Hongzheng Tian: hongzhet@uci.edu, or hongzheng.tian@hpe.com
