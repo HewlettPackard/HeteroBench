@@ -41,7 +41,7 @@ pl_*/
 Makefile
 
 # Media files
-# *.png
+*.png
 *.jpg
 
 # Executable files
