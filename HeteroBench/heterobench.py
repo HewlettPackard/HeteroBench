@@ -471,10 +471,10 @@ def run_makefile(benchmark, backend, env, action, options, log_file=None):
         if backend['fpga']:
             fpga_sources_with_prefix.remove('fpga_impl/pad_input.cpp')
 
-        # if the inpu_path is not existed, or nothing is inside
-        # then generate the input data first
+        # Check if the input_path exists and all required files are inside
         input_path = os.path.expandvars(benchmark['parameters']['input'].replace('$(', '$').replace(')', ''))
-        if (not os.path.exists(input_path)) or (not os.listdir(input_path)):
+        required_files = ['b_fc.bin', 'input_image.bin', 'W_conv.bin', 'W_fc.bin']
+        if (not os.path.exists(input_path)) or not all(os.path.exists(os.path.join(input_path, file)) for file in required_files):
             if not os.path.exists(input_path):
                 os.makedirs(input_path)
             print(f"Generating input data for {benchmark['name']}...")
@@ -530,10 +530,10 @@ def run_makefile(benchmark, backend, env, action, options, log_file=None):
             fpga_sources_with_prefix.append('fpga_impl/dot_add2.cpp')
             fpga_sources_with_prefix.append('fpga_impl/dot_add3.cpp')
 
-        # if the inpu_path is not existed, or nothing is inside
-        # then generate the input data first
+        # Check if the input_path exists and all required files are inside
         input_path = os.path.expandvars(benchmark['parameters']['input'].replace('$(', '$').replace(')', ''))
-        if (not os.path.exists(input_path)) or (not os.listdir(input_path)):
+        required_files = ['a0.bin', 'b0.bin', 'b1.bin', 'b2.bin', 'b3.bin', 'w0.bin', 'w1.bin', 'w2.bin', 'w3.bin']
+        if (not os.path.exists(input_path)) or not all(os.path.exists(os.path.join(input_path, file)) for file in required_files):
             if not os.path.exists(input_path):
                 os.makedirs(input_path)
             print(f"Generating input data for {benchmark['name']}...")
