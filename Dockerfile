@@ -57,7 +57,7 @@ RUN pip3 install Jinja2 opencv-python numba numpy
 
 # Set up environment variables for GPU and FPGA tools
 ENV PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/24.11/compilers/bin:$PATH"
-# ENV LD_LIBRARY_PATH="/opt/nvidia/hpc_sdk/Linux_x86_64/24.11/compilers/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/lib/llvm-14/lib"
 
 # Copy the HeteroBench repository
 WORKDIR /workspace
@@ -66,6 +66,7 @@ WORKDIR /workspace/HeteroBench
 
 # Build the benchmarking code
 RUN python3 heterobench.py all build cpu 
+# RUN python3 heterobench.py all build cpu serial
 RUN python3 heterobench.py all build gpu_omp 
 RUN python3 heterobench.py all build gpu_acc 
 RUN python3 heterobench.py all build gpu_cuda 

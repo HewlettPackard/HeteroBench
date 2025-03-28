@@ -33,10 +33,24 @@ run() {
     echo
 }
 
+run_cpu() {
+    if [ $# -eq 0 ]; then
+        filename=logs/cpu_omp_$(date +"%Y%m%d_%I%M%S").log
+    else
+        filename=logs/cpu_${1}_$(date +"%Y%m%d_%I%M%S").log
+    fi
+    echo "Output for the next run is in the file - ${filename}."
+    echo "Running all benchmarks for cpu $1 ..."
+    time docker run -it heterobench-container python3 /workspace/HeteroBench/heterobench.py all run cpu $1 > ${filename}
+    echo "Done."
+    echo
+}
+
 # RUN different benchmarks
 # run python
 # run numba
-run cpu
+run_cpu
+# run_cpu serial
 run gpu_omp
 run gpu_acc
 run gpu_cuda
