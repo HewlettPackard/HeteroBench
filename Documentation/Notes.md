@@ -24,22 +24,16 @@ HeteroBench can be run on systems without a GPU by using only CPU implementation
 
 1. To build and run C++ benchmarks on a CPU only, modify the Dockerfile:
    ```bash
-   sed -i '69,71 {s/^/# /}' Dockerfile
-   echo "" >> Dockerfile
-   echo "RUN python3 heterobench.py all build cpu serial" >> Dockerfile
+   sed -i '38,53 {s/^/# /}' Dockerfile
+   sed -i '70,72 {s/^/# /}' Dockerfile
+   sed -i '69 {s/^# //}' Dockerfile
    ```
-   This will comment out the GPU related build, and add a CPU serial build in addition.
+   This will comment out the GPU related build, and uncomment a CPU serial build in addition.
 
 2. Update run.sh to run CPU benchmarks:
    ```bash
-   sed -i '40,42 {s/^/# /}' run.sh
-   echo "" >> run.sh
-   echo "run cpu serial" >> run.sh
-   ```
-
-3. For Docker execution on systems without a GPU, remove the `--gpus all` parameter:
-   ```bash
-   sed -i '31 {s/--gpus all -it/-it/g}' run.sh
+   sed -i '53 {s/^# //}' run.sh
+   sed -i '54,56 {s/^/# /}' run.sh
    ```
 
 ## Running on an FPGA

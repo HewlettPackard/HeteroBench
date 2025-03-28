@@ -118,11 +118,12 @@ The table below shows the average build and execution time for each scenario on 
 | GPU CUDA             | 125                  | 36                 |
 | FPGA                 | Over 24 hrs          | Over 3 hrs         |
 
-Note: Python and Numba scenarios are commented out by default in the `run.sh` file due to their long execution times. To include them, uncomment lines `#37` and `#38` in the run.sh file, or just run:
+Note: Python and Numba scenarios are commented out by default in the `run.sh` file due to their long execution times. To include them, uncomment lines `#50` and `#51` in the run.sh file, or just run:
 
 ```bash
-sed -i '37,38 s/^# //' run.sh
+sed -i '50,51 s/^# //' run.sh
 ```
+Similarily to run on CPU serial uncomment lines `#53` 
 
 ## Profiling Results
 
